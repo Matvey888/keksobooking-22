@@ -4,6 +4,13 @@ import { getRandomNumber } from './util.js'
 import { createCard } from './popup.js';
 import { toggleActivateForm, setAdds } from './form.js';
 
+fetch('https://22.javascript.pages.academy/keksobooking/data')
+  .then((response) => response.json())
+  .then((offers) => {
+    createCard(offers.slice(0, 10));
+    // console.log(offers);
+  });
+
 const points = addOffers();
 
 const CENTER_MAP = {
