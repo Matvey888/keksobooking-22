@@ -1,4 +1,4 @@
-// import { getData } from './api.js';
+import './api.js';
 import './form.js';
 import { initMap } from './map.js';
 
