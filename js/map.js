@@ -1,10 +1,7 @@
 /* global L:readonly */
-import { addOffers, Coordinates } from './data.js';
-import { getRandomNumber } from './util.js'
+import { getData } from './api.js'
 import { createCard } from './popup.js';
 import { toggleActivateForm, setAdds } from './form.js';
-
-const points = addOffers();
 
 const CENTER_MAP = {
   lat: 35.68950,
@@ -24,6 +21,31 @@ const Icon = {
 };
 
 const initMap = () => {
+  const onSuccess = (points) => {
+    points.forEach((point) => {
+      const marker = L.marker(
+        {
+          lat: point.location.lat,
+          lng: point.location.lng,
+        },
+        {
+          draggable: false,
+          icon: icon,
+        },
+      );
+
+      marker
+        .addTo(map)
+        .bindPopup(
+          createCard(point),
+        );
+    });
+  };
+
+  const onError = (error) => {
+    console.log(error)
+  };
+
   const map = L.map('map-canvas')
     .on('load', () => {
       toggleActivateForm();
@@ -64,26 +86,7 @@ const initMap = () => {
     iconAnchor: [Icon.WIDTH / 2, Icon.HEIGHT],
   });
 
-  points.forEach((point) => {
-    const marker = L.marker(
-      {
-        lat: getRandomNumber(Coordinates.MIN_X,Coordinates.MAX_X, 5),
-        lng: getRandomNumber(Coordinates.MIN_Y,Coordinates.MAX_Y, 5),
-      },
-      {
-        draggable: false,
-        icon: icon,
-      },
-    );
-
-    marker
-      .addTo(map)
-      .bindPopup(
-        createCard(point),
-      );
-  });
-
-  return map;
+  getData(onSuccess, onError);
 };
 
 export { initMap };

@@ -1,10 +1,15 @@
-// const getData =
-fetch('https://22.javascript.pages.academy/keksobooking/data')
-  .then((response) => response.json())
-  .then((offers) => {
-    // createCard(offers.slice(0, 10));
-    console.log(offers);
-  });
+const Urls = {
+  GET: 'https://22.javascript.pages.academy/keksobooking/data',
+};
 
-// export { getData }
-// данные с сервера получены, как дальше вставить их на карту?
+const getData = (onSuccess, onError) => {
+  fetch(Urls.GET)
+    .then((response) => response.json())
+    .then((offers) => {
+      onSuccess(offers.slice());
+    }).catch(() => {
+      onError()
+    });
+};
+
+export { getData }
