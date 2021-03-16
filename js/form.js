@@ -109,4 +109,20 @@ const setAdds = (coordinates) => {
   addressElement.value = `${coordinates.lat.toFixed(DECIMAL_PLACES)}, ${coordinates.lng.toFixed(DECIMAL_PLACES)}`;
 };
 
-export { toggleActivateForm, setAdds };
+const setData = (onSuccess) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const formData = new FormData(evt.target);
+
+    fetch('https://22.javascript.pages.academy/keksobooking',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    ).then(() => onSuccess());
+  });
+};
+
+
+export { toggleActivateForm, setAdds, setData };

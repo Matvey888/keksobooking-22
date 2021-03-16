@@ -21,6 +21,7 @@ const Icon = {
 };
 
 const initMap = () => {
+
   const onSuccess = (points) => {
     points.forEach((point) => {
       const marker = L.marker(
@@ -43,7 +44,7 @@ const initMap = () => {
   };
 
   const onError = (error) => {
-    console.log(error)
+    throw Error(error);
   };
 
   const map = L.map('map-canvas')

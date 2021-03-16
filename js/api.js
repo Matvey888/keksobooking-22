@@ -12,4 +12,20 @@ const getData = (onSuccess, onError) => {
     });
 };
 
-export { getData }
+const sendData = (onSuccess, onError, body, url) => {
+  fetch(
+    url,
+    {
+      method: 'POST',
+      body,
+    },
+  )
+    .then((response) => response.json())
+    .then((offers) => {
+      onSuccess(offers);
+    }).catch(() => {
+      onError()
+    });
+};
+
+export { getData, sendData };
