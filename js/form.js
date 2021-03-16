@@ -1,3 +1,4 @@
+import { sendData } from './api.js';
 import { APARTAMENT_PRICE } from './data.js';
 
 const DECIMAL_PLACES = 5;
@@ -113,14 +114,11 @@ const setData = (onSuccess) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    const formData = new FormData(evt.target);
-
-    fetch('https://22.javascript.pages.academy/keksobooking',
-      {
-        method: 'POST',
-        body: formData,
-      },
-    ).then(() => onSuccess());
+    sendData(
+      () => onSuccess(),
+      () => console.log('Error'),
+      new FormData(evt.target),
+    );
   });
 };
 
