@@ -1,5 +1,3 @@
-// const ALERT_SHOW_TIME = 5000;
-
 const getRandomNumber = (min, max, floatNum = 0) => {
   if (max <= min || (min < 0 || max < 0)) {
     return -1;
@@ -35,14 +33,12 @@ const numDecline = (num, words) => {
   return words[2];
 };
 
-
 const successPopup = document.querySelector('#success').content;
 const successPopupContent = successPopup.querySelector('.success').cloneNode(true);
 
 const templateErr = document.querySelector('#error').content;
 const popupError = templateErr.querySelector('.error').cloneNode(true);
 const errorButton = popupError.querySelector('.error__button');
-
 
 const showError = () => {
   document.body.append(popupError);

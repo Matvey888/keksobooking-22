@@ -2,8 +2,6 @@ import { sendData } from './api.js';
 import { APARTAMENT_PRICE } from './data.js';
 import { showError } from './util.js';
 
-
-
 const DECIMAL_PLACES = 5;
 const MAX_PRICE = 1000000;
 
@@ -67,7 +65,6 @@ apartamentPriceElement.addEventListener('input', (evt) => {
   evt.target.reportValidity();
 });
 
-
 const toggleActivateForm = () => {
   mapFilters.classList.toggle('.map__filters--disabled');
   adForm.classList.toggle('ad-form--disabled');
@@ -114,8 +111,6 @@ const setAdds = (coordinates) => {
   addressElement.value = `${coordinates.lat.toFixed(DECIMAL_PLACES)}, ${coordinates.lng.toFixed(DECIMAL_PLACES)}`;
 };
 
-
-
 const setData = (onSuccess) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -127,7 +122,5 @@ const setData = (onSuccess) => {
     );
   });
 };
-
-
 
 export { toggleActivateForm, setAdds, setData, resetButton, addressElement, apartamentPriceElement, adForm };

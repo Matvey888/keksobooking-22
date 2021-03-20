@@ -32,5 +32,4 @@ const sendData = (onSuccess, onError, url, body) => {
     });
 };
 
-
 export { getData, sendData, Urls };
