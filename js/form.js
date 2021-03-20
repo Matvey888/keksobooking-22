@@ -132,4 +132,4 @@ const setData = (onSuccess) => {
 
 
 
-export { toggleActivateForm, setAdds, setData, resetButton, addressElement, apartamentPriceElement, adFormTitle, timeInElement, timeOutElement, apartamentTypeElement, roomNumber, capacity, description, adForm };
+export { toggleActivateForm, setAdds, setData, resetButton, addressElement, apartamentPriceElement, adForm };

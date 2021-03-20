@@ -1,11 +1,8 @@
 /* global L:readonly */
 import { getData, sendData, Urls } from './api.js'
 import { createCard } from './popup.js';
-import { toggleActivateForm, setAdds, resetButton, addressElement, apartamentPriceElement, adFormTitle, timeInElement, timeOutElement, apartamentTypeElement, roomNumber, capacity, description, adForm } from './form.js';
+import { toggleActivateForm, setAdds, resetButton, addressElement, adForm } from './form.js';
 import { successPopupContent, showError } from './util.js';
-import { APARTAMENT_PRICE } from './data.js';
-
-const ADDRESS_TIME = 0;
 
 const CENTER_MAP = {
   lat: 35.68950,
@@ -23,6 +20,13 @@ const Icon = {
   WIDTH: 40,
   HEIGHT: 40,
 };
+
+const map = L.map('map-canvas')
+  .on('load', () => {
+    toggleActivateForm();
+    setAdds(CENTER_MAP);
+  })
+  .setView(CENTER_MAP, SCALE);
 
 const mainPinIcon = L.icon({
   iconUrl: '/img/main-pin.svg',
@@ -65,13 +69,6 @@ const initMap = () => {
     throw Error(error);
   };
 
-  const map = L.map('map-canvas')
-    .on('load', () => {
-      toggleActivateForm();
-      setAdds(CENTER_MAP);
-    })
-    .setView(CENTER_MAP, SCALE);
-
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
@@ -94,29 +91,28 @@ const initMap = () => {
   getData(onSuccess, onError);
 };
 
-resetButton.addEventListener('click', () => {
-  setTimeout(() => {
-    addressElement.value =
-      `${CENTER_MAP.lat.toFixed(5)}, ${CENTER_MAP.lng.toFixed(5)}`;
-  }, ADDRESS_TIME);
-  apartamentPriceElement.placeholder = `${APARTAMENT_PRICE['flat']}`;
-  mainMarker.setLatLng(CENTER_MAP);
-  document.body.append(successPopupContent);
+const resetMap = () => {
+  mainMarker.setLatLng(L.latLng(CENTER_MAP.lat, CENTER_MAP.lng));
+  map.setView({
+    lat: CENTER_MAP.lat,
+    lng: CENTER_MAP.lng,
+  }, SCALE);
+}
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetForm();
+  resetMap();
 });
 
+const fillAddressInput = () => {
+  const {lat, lng} = mainMarker.getLatLng();
+  addressElement.value = `${lat.toFixed(5)} ${lng.toFixed(5)}`;
+}
+
 const resetForm = () => {
-  adFormTitle.value = '';
-  apartamentTypeElement.value = 'flat';
-  timeInElement.value = '12:00';
-  timeOutElement.value = '12:00';
-  addressElement.value =
-    `${CENTER_MAP.lat.toFixed(5)}, ${CENTER_MAP.lng.toFixed(5)}`;
-  roomNumber.value = '1';
-  capacity.value = '1';
-  description.value = '';
-  apartamentPriceElement.value = '';
-  apartamentPriceElement.placeholder = `${APARTAMENT_PRICE['flat']}`;
-  mainMarker.setLatLng(CENTER_MAP);
+  adForm.reset();
+  fillAddressInput();
   document.body.append(successPopupContent);
 };
 
