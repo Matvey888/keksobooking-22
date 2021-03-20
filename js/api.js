@@ -13,9 +13,9 @@ const getData = (onSuccess, onError) => {
     });
 };
 
-const sendData = (onSuccess, onError, body) => {
+const sendData = (onSuccess, onError, url, body) => {
   fetch(
-    Urls.POST,
+    url,
     {
       method: 'POST',
       body,
@@ -32,4 +32,5 @@ const sendData = (onSuccess, onError, body) => {
     });
 };
 
-export { getData, sendData };
+
+export { getData, sendData, Urls };

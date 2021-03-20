@@ -1,5 +1,8 @@
 import { sendData } from './api.js';
 import { APARTAMENT_PRICE } from './data.js';
+import { showError } from './util.js';
+
+
 
 const DECIMAL_PLACES = 5;
 const MAX_PRICE = 1000000;
@@ -37,6 +40,10 @@ const timeOutElement = adForm.querySelector('#timeout');
 const roomNumber = adForm.querySelector('#room_number');
 
 const capacity = adForm.querySelector('#capacity');
+
+const description = adForm.querySelector('#description');
+
+const resetButton = adForm.querySelector('.ad-form__reset');
 
 adFormTitle.addEventListener('input', (evt) => {
   const valueLength = evt.target.value.length;
@@ -105,10 +112,11 @@ onChangeRoomNumber();
 
 roomNumber.addEventListener('change', onChangeRoomNumber);
 
-
 const setAdds = (coordinates) => {
   addressElement.value = `${coordinates.lat.toFixed(DECIMAL_PLACES)}, ${coordinates.lng.toFixed(DECIMAL_PLACES)}`;
 };
+
+
 
 const setData = (onSuccess) => {
   adForm.addEventListener('submit', (evt) => {
@@ -116,11 +124,12 @@ const setData = (onSuccess) => {
 
     sendData(
       () => onSuccess(),
-      () => console.log('Error'),
+      () => showError(),
       new FormData(evt.target),
     );
   });
 };
 
 
-export { toggleActivateForm, setAdds, setData };
+
+export { toggleActivateForm, setAdds, setData, resetButton, addressElement, apartamentPriceElement, adFormTitle, timeInElement, timeOutElement, apartamentTypeElement, roomNumber, capacity, description, adForm };

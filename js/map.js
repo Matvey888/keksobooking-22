@@ -1,7 +1,11 @@
 /* global L:readonly */
-import { getData } from './api.js'
+import { getData, sendData, Urls } from './api.js'
 import { createCard } from './popup.js';
-import { toggleActivateForm, setAdds } from './form.js';
+import { toggleActivateForm, setAdds, resetButton, addressElement, apartamentPriceElement, adFormTitle, timeInElement, timeOutElement, apartamentTypeElement, roomNumber, capacity, description, adForm } from './form.js';
+import { successPopupContent, showError } from './util.js';
+import { APARTAMENT_PRICE } from './data.js';
+
+const ADDRESS_TIME = 0;
 
 const CENTER_MAP = {
   lat: 35.68950,
@@ -19,6 +23,20 @@ const Icon = {
   WIDTH: 40,
   HEIGHT: 40,
 };
+
+const mainPinIcon = L.icon({
+  iconUrl: '/img/main-pin.svg',
+  iconSize: [MainIcon.WIDTH, MainIcon.HEIGHT],
+  iconAnchor: [MainIcon.WIDTH / 2, MainIcon.HEIGHT],
+});
+
+const mainMarker = L.marker(
+  CENTER_MAP,
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
 
 const initMap = () => {
 
@@ -61,20 +79,6 @@ const initMap = () => {
     },
   ).addTo(map);
 
-  const mainPinIcon = L.icon({
-    iconUrl: '/img/main-pin.svg',
-    iconSize: [MainIcon.WIDTH, MainIcon.HEIGHT],
-    iconAnchor: [MainIcon.WIDTH / 2, MainIcon.HEIGHT],
-  });
-
-  const mainMarker = L.marker(
-    CENTER_MAP,
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
-
   mainMarker.on('moveend', (evt) => {
     setAdds(evt.target.getLatLng());
   });
@@ -89,5 +93,36 @@ const initMap = () => {
 
   getData(onSuccess, onError);
 };
+
+resetButton.addEventListener('click', () => {
+  setTimeout(() => {
+    addressElement.value =
+      `${CENTER_MAP.lat.toFixed(5)}, ${CENTER_MAP.lng.toFixed(5)}`;
+  }, ADDRESS_TIME);
+  apartamentPriceElement.placeholder = `${APARTAMENT_PRICE['flat']}`;
+  mainMarker.setLatLng(CENTER_MAP);
+  document.body.append(successPopupContent);
+});
+
+const resetForm = () => {
+  adFormTitle.value = '';
+  apartamentTypeElement.value = 'flat';
+  timeInElement.value = '12:00';
+  timeOutElement.value = '12:00';
+  addressElement.value =
+    `${CENTER_MAP.lat.toFixed(5)}, ${CENTER_MAP.lng.toFixed(5)}`;
+  roomNumber.value = '1';
+  capacity.value = '1';
+  description.value = '';
+  apartamentPriceElement.value = '';
+  apartamentPriceElement.placeholder = `${APARTAMENT_PRICE['flat']}`;
+  mainMarker.setLatLng(CENTER_MAP);
+  document.body.append(successPopupContent);
+};
+
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  sendData(resetForm, showError, Urls.POST, new FormData(evt.target))
+});
 
 export { initMap };
