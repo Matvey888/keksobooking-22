@@ -41,8 +41,6 @@ const roomNumber = adForm.querySelector('#room_number');
 
 const capacity = adForm.querySelector('#capacity');
 
-const description = adForm.querySelector('#description');
-
 const resetButton = adForm.querySelector('.ad-form__reset');
 
 adFormTitle.addEventListener('input', (evt) => {
