@@ -2,7 +2,7 @@
 import { getData, sendData, Urls } from './api.js'
 import { createCard } from './popup.js';
 import { toggleActivateForm, setAdds, resetButton, addressElement, adForm } from './form.js';
-import { successPopupContent, showError } from './util.js';
+import { successPopupContent, showError, showAlert } from './util.js';
 
 const CENTER_MAP = {
   lat: 35.68950,
@@ -65,8 +65,8 @@ const initMap = () => {
     });
   };
 
-  const onError = (error) => {
-    throw Error(error);
+  const onError = () => {
+    showAlert('Ошибка получения данных!');
   };
 
   L.tileLayer(
