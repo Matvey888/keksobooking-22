@@ -3,35 +3,20 @@ const Urls = {
   POST: 'https://22.javascript.pages.academy/keksobooking',
 };
 
-const getData = (onSuccess, onError) => {
-  fetch(Urls.GET)
-    .then((response) => response.json())
-    .then((offers) => {
-      onSuccess(offers.slice());
-    }).catch(() => {
-      onError()
-    });
-};
-
-const sendData = (onSuccess, onError, url, body) => {
+const request = (onSuccess, onError, method, data) => {
   fetch(
-    url,
+    Urls[method],
     {
-      method: 'POST',
-      body,
+      method: method,
+      body: data,
     },
   )
-    .then((response) => {
-      if (response.ok) {
-        onSuccess();
-      } else {
-        onError();
-      }
+    .then((response) => response.json())
+    .then((offers) => {
+      onSuccess(offers);
     }).catch(() => {
       onError();
     });
 };
 
-
-
-export { getData, sendData, Urls };
+export { request };

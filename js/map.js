@@ -1,5 +1,5 @@
 /* global L:readonly */
-import { getData, sendData, Urls } from './api.js'
+import { request } from './api.js'
 import { createCard } from './popup.js';
 import { toggleActivateForm, setAdds, resetButton, addressElement, adForm } from './form.js';
 import { successPopupContent, showError, showAlert } from './util.js';
@@ -66,7 +66,7 @@ const initMap = () => {
   };
 
   const onError = () => {
-    showAlert('Ошибка получения данных!');
+    showAlert('Ошибка обработки данных!');
   };
 
   L.tileLayer(
@@ -88,7 +88,7 @@ const initMap = () => {
     iconAnchor: [Icon.WIDTH / 2, Icon.HEIGHT],
   });
 
-  getData(onSuccess, onError);
+  request(onSuccess, onError, 'GET');
 };
 
 const resetMap = () => {
@@ -118,7 +118,7 @@ const resetForm = () => {
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  sendData(resetForm, showError, Urls.POST, new FormData(evt.target))
+  request(resetForm, showError, 'POST', new FormData(evt.target))
 });
 
 export { initMap };

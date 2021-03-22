@@ -1,4 +1,4 @@
-import { sendData } from './api.js';
+import { request } from './api.js';
 import { APARTAMENT_PRICE } from './data.js';
 import { showError } from './util.js';
 
@@ -115,11 +115,7 @@ const setData = (onSuccess) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    sendData(
-      () => onSuccess(),
-      () => showError(),
-      new FormData(evt.target),
-    );
+    request(onSuccess, showError, new FormData(evt.target));
   });
 };
 
