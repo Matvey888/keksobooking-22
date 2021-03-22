@@ -96,12 +96,13 @@ const initMap = () => {
 };
 
 const resetMap = () => {
-  mainMarker.setLatLng(L.latLng(CENTER_MAP.lat, CENTER_MAP.lng));
+  mainMarker.setLatLng([CENTER_MAP.lat, CENTER_MAP.lng]);
   map.setView({
     lat: CENTER_MAP.lat,
     lng: CENTER_MAP.lng,
   }, SCALE);
-}
+  setAdds(CENTER_MAP)
+};
 
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
@@ -109,15 +110,10 @@ resetButton.addEventListener('click', (evt) => {
   resetMap();
 });
 
-const fillAddressInput = () => {
-  const {lat, lng} = mainMarker.getLatLng();
-  addressElement.value = `${lat.toFixed(5)} ${lng.toFixed(5)}`;
-}
-
 const resetForm = () => {
   adForm.reset();
   changeMinPrice();
-  fillAddressInput();
+  resetMap();
   document.body.append(successPopupContent);
 };
 
