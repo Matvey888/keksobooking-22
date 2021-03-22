@@ -119,4 +119,4 @@ const setData = (onSuccess) => {
   });
 };
 
-export { toggleActivateForm, setAdds, setData, resetButton, addressElement, apartamentPriceElement, adForm };
+export { toggleActivateForm, setAdds, setData, resetButton, addressElement, apartamentPriceElement, adForm, changeMinPrice };

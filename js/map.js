@@ -1,7 +1,7 @@
 /* global L:readonly */
 import { request } from './api.js'
 import { createCard } from './popup.js';
-import { toggleActivateForm, setAdds, resetButton, addressElement, adForm } from './form.js';
+import { toggleActivateForm, setAdds, resetButton, addressElement, adForm, changeMinPrice } from './form.js';
 import { successPopupContent, showError, showAlert } from './util.js';
 
 const openStrUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -116,6 +116,7 @@ const fillAddressInput = () => {
 
 const resetForm = () => {
   adForm.reset();
+  changeMinPrice();
   fillAddressInput();
   document.body.append(successPopupContent);
 };
