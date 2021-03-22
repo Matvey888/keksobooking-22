@@ -4,6 +4,10 @@ import { createCard } from './popup.js';
 import { toggleActivateForm, setAdds, resetButton, addressElement, adForm } from './form.js';
 import { successPopupContent, showError, showAlert } from './util.js';
 
+const openStrUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+const mapAtrr = '&copy; <a href="https://www.openstreet.org/copiryght">OpenStreeetMap</a> contibutors | Icons made by <a href="https://www.freepic.com" title="Freepic">Freepic</a> from <a href="https://www.flaticon.com/" title="Flatcon">www.flatcon.com</a>';
+
 const CENTER_MAP = {
   lat: 35.68950,
   lng: 139.69200,
@@ -70,9 +74,9 @@ const initMap = () => {
   };
 
   L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    openStrUrl,
     {
-      attribution: '&copy; <a href="https://www.openstreet.org/copiryght">OpenStreeetMap</a> contibutors | Icons made by <a href="https://www.freepic.com" title="Freepic">Freepic</a> from <a href="https://www.flaticon.com/" title="Flatcon">www.flatcon.com</a>',
+      attribution: mapAtrr,
     },
   ).addTo(map);
 
