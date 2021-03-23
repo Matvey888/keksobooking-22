@@ -1,10 +1,12 @@
 /* global L:readonly */
-import { addOffers, Coordinates } from './data.js';
-import { getRandomNumber } from './util.js'
+import { request } from './api.js'
 import { createCard } from './popup.js';
-import { toggleActivateForm, setAdds } from './form.js';
+import { toggleActivateForm, setAdds, resetButton, adForm, changeMinPrice } from './form.js';
+import { successPopupContent, showError, showAlert } from './util.js';
 
-const points = addOffers();
+const openStrUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+const mapAtrr = '&copy; <a href="https://www.openstreet.org/copiryght">OpenStreeetMap</a> contibutors | Icons made by <a href="https://www.freepic.com" title="Freepic">Freepic</a> from <a href="https://www.flaticon.com/" title="Flatcon">www.flatcon.com</a>';
 
 const CENTER_MAP = {
   lat: 35.68950,
@@ -23,34 +25,60 @@ const Icon = {
   HEIGHT: 40,
 };
 
+const map = L.map('map-canvas')
+  .on('load', () => {
+    toggleActivateForm();
+    setAdds(CENTER_MAP);
+  })
+  .setView(CENTER_MAP, SCALE);
+
+const mainPinIcon = L.icon({
+  iconUrl: '/img/main-pin.svg',
+  iconSize: [MainIcon.WIDTH, MainIcon.HEIGHT],
+  iconAnchor: [MainIcon.WIDTH / 2, MainIcon.HEIGHT],
+});
+
+const mainMarker = L.marker(
+  CENTER_MAP,
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+
 const initMap = () => {
-  const map = L.map('map-canvas')
-    .on('load', () => {
-      toggleActivateForm();
-      setAdds(CENTER_MAP);
-    })
-    .setView(CENTER_MAP, SCALE);
+
+  const onSuccess = (points) => {
+    points.forEach((point) => {
+      const marker = L.marker(
+        {
+          lat: point.location.lat,
+          lng: point.location.lng,
+        },
+        {
+          draggable: false,
+          icon: icon,
+        },
+      );
+
+      marker
+        .addTo(map)
+        .bindPopup(
+          createCard(point),
+        );
+    });
+  };
+
+  const onError = () => {
+    showAlert('Ошибка обработки данных!');
+  };
 
   L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    openStrUrl,
     {
-      attribution: '&copy; <a href="https://www.openstreet.org/copiryght">OpenStreeetMap</a> contibutors | Icons made by <a href="https://www.freepic.com" title="Freepic">Freepic</a> from <a href="https://www.flaticon.com/" title="Flatcon">www.flatcon.com</a>',
+      attribution: mapAtrr,
     },
   ).addTo(map);
-
-  const mainPinIcon = L.icon({
-    iconUrl: '/img/main-pin.svg',
-    iconSize: [MainIcon.WIDTH, MainIcon.HEIGHT],
-    iconAnchor: [MainIcon.WIDTH / 2, MainIcon.HEIGHT],
-  });
-
-  const mainMarker = L.marker(
-    CENTER_MAP,
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
 
   mainMarker.on('moveend', (evt) => {
     setAdds(evt.target.getLatLng());
@@ -64,26 +92,34 @@ const initMap = () => {
     iconAnchor: [Icon.WIDTH / 2, Icon.HEIGHT],
   });
 
-  points.forEach((point) => {
-    const marker = L.marker(
-      {
-        lat: getRandomNumber(Coordinates.MIN_X,Coordinates.MAX_X, 5),
-        lng: getRandomNumber(Coordinates.MIN_Y,Coordinates.MAX_Y, 5),
-      },
-      {
-        draggable: false,
-        icon: icon,
-      },
-    );
-
-    marker
-      .addTo(map)
-      .bindPopup(
-        createCard(point),
-      );
-  });
-
-  return map;
+  request(onSuccess, onError, 'GET');
 };
+
+const resetMap = () => {
+  mainMarker.setLatLng([CENTER_MAP.lat, CENTER_MAP.lng]);
+  map.setView({
+    lat: CENTER_MAP.lat,
+    lng: CENTER_MAP.lng,
+  }, SCALE);
+  setAdds(CENTER_MAP)
+};
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetForm();
+  resetMap();
+});
+
+const resetForm = () => {
+  adForm.reset();
+  changeMinPrice();
+  resetMap();
+  document.body.append(successPopupContent);
+};
+
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  request(resetForm, showError, 'POST', new FormData(evt.target))
+});
 
 export { initMap };

@@ -1,4 +1,6 @@
+import { request } from './api.js';
 import { APARTAMENT_PRICE } from './data.js';
+import { showError } from './util.js';
 
 const DECIMAL_PLACES = 5;
 const MAX_PRICE = 1000000;
@@ -37,6 +39,8 @@ const roomNumber = adForm.querySelector('#room_number');
 
 const capacity = adForm.querySelector('#capacity');
 
+const resetButton = adForm.querySelector('.ad-form__reset');
+
 adFormTitle.addEventListener('input', (evt) => {
   const valueLength = evt.target.value.length;
   if (valueLength < TitleLength.MIN) {
@@ -60,7 +64,6 @@ apartamentPriceElement.addEventListener('input', (evt) => {
 
   evt.target.reportValidity();
 });
-
 
 const toggleActivateForm = () => {
   mapFilters.classList.toggle('.map__filters--disabled');
@@ -95,7 +98,7 @@ const onChangeRoomNumber = () => {
   if (capacity.options.length > 0) {
     [].forEach.call(capacity.options, (item) => {
       item.selected = (RoomsCapacity[roomNumber.value][0] === item.value);
-      item.disabled = !(RoomsCapacity[roomNumber.value].indexOf(item.value) >= 0);
+      item.hidden = !(RoomsCapacity[roomNumber.value].indexOf(item.value) >= 0);
     });
   }
 };
@@ -104,9 +107,16 @@ onChangeRoomNumber();
 
 roomNumber.addEventListener('change', onChangeRoomNumber);
 
-
 const setAdds = (coordinates) => {
   addressElement.value = `${coordinates.lat.toFixed(DECIMAL_PLACES)}, ${coordinates.lng.toFixed(DECIMAL_PLACES)}`;
 };
 
-export { toggleActivateForm, setAdds };
+const setData = (onSuccess) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    request(onSuccess, showError, new FormData(evt.target));
+  });
+};
+
+export { toggleActivateForm, setAdds, setData, resetButton, addressElement, adForm, changeMinPrice };
