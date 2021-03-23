@@ -33,7 +33,7 @@ const map = L.map('map-canvas')
   .setView(CENTER_MAP, SCALE);
 
 const mainPinIcon = L.icon({
-  iconUrl: '/img/main-pin.svg',
+  iconUrl: './img/main-pin.svg',
   iconSize: [MainIcon.WIDTH, MainIcon.HEIGHT],
   iconAnchor: [MainIcon.WIDTH / 2, MainIcon.HEIGHT],
 });
@@ -87,7 +87,7 @@ const initMap = () => {
   mainMarker.addTo(map);
 
   const icon = L.icon({
-    iconUrl: '/img/pin.svg',
+    iconUrl: './img/pin.svg',
     iconSize: [Icon.WIDTH, Icon.HEIGHT],
     iconAnchor: [Icon.WIDTH / 2, Icon.HEIGHT],
   });
