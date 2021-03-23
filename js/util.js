@@ -1,5 +1,7 @@
 const ALERT_SHOW_TIME = 5000;
 
+const escButton = 'Escape';
+
 const numDecline = (num, words) => {
   num = Math.abs(num) % 100;
   let num1 = num % 10;
@@ -32,7 +34,7 @@ const closePopup = (popup, button) => {
   });
 
   document.addEventListener('keydown', (evt) => {
-    if (evt.key === 27) {
+    if (evt.key === escButton) {
       popup.remove();
     }
   });
@@ -68,4 +70,12 @@ const showAlert = (message) => {
 closePopup(popupError, errorButton);
 closePopup(successPopupContent);
 
-export { numDecline, showError, successPopupContent, showAlert };
+const debounce = (cb, delay) => {
+  let timeout;
+  return () => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(cb, delay)
+  };
+};
+
+export { numDecline, showError, successPopupContent, showAlert, debounce };

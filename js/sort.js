@@ -46,23 +46,23 @@ const filterRules = {
 };
 
 const filterData = (data) => {
-  let offers = [];
+  let filterOffers = [];
   let i = 0;
   let result;
 
-  while (i < data.length && offers.length < MAX_OFFERS) {
+  while (i < data.length && filterOffers.length < MAX_OFFERS) {
     result = filters.every((filter) => {
       return (filter.value === DEFAULT_VALUE) ? true : filterRules[filter.id](data[i], filter);
     });
 
     if (result) {
-      offers.push(data[i]);
+      filterOffers.push(data[i]);
     }
 
     i++;
   }
 
-  return offers;
+  return filterOffers;
 };
 
-export { filterData };
+export { filterData, MAX_OFFERS };

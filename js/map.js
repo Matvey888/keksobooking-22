@@ -1,8 +1,13 @@
 /* global L:readonly */
 import { request } from './api.js'
 import { createCard } from './popup.js';
-import { toggleActivateForm, setAdds, resetButton, adForm, changeMinPrice } from './form.js';
-import { successPopupContent, showError, showAlert } from './util.js';
+import { toggleActivateForm, setAdds, resetButton, adForm, changeMinPrice, mapFilters } from './form.js';
+import { successPopupContent, showError, showAlert, debounce } from './util.js';
+import { filterData, MAX_OFFERS } from './sort.js';
+
+let markers = [];
+
+const RERENDER_DELAY = 500;
 
 const openStrUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
@@ -23,6 +28,10 @@ const MainIcon = {
 const Icon = {
   WIDTH: 40,
   HEIGHT: 40,
+};
+
+const onError = () => {
+  showAlert('Ошибка обработки данных!');
 };
 
 const map = L.map('map-canvas')
@@ -46,9 +55,16 @@ const mainMarker = L.marker(
   },
 );
 
+const layerGroup = L.layerGroup().addTo(map);
+
+const removeMarkers = () => {
+  layerGroup.clearLayers();
+  map.closePopup();
+}
+
 const initMap = () => {
 
-  const onSuccess = (points) => {
+  const createMapIcon = (points) => {
     points.forEach((point) => {
       const marker = L.marker(
         {
@@ -62,15 +78,14 @@ const initMap = () => {
       );
 
       marker
-        .addTo(map)
+        .addTo(layerGroup)
         .bindPopup(
           createCard(point),
+          {
+            keepInViev: true,
+          },
         );
     });
-  };
-
-  const onError = () => {
-    showAlert('Ошибка обработки данных!');
   };
 
   L.tileLayer(
@@ -91,6 +106,17 @@ const initMap = () => {
     iconSize: [Icon.WIDTH, Icon.HEIGHT],
     iconAnchor: [Icon.WIDTH / 2, Icon.HEIGHT],
   });
+
+  const onMapFiltersChange = () => {
+    removeMarkers();
+    createMapIcon(filterData(markers.slice()))
+  };
+
+  const onSuccess = (data) => {
+    markers = data.slice();
+    createMapIcon(markers.slice(0, MAX_OFFERS));
+    mapFilters.addEventListener('change', debounce(onMapFiltersChange), RERENDER_DELAY);
+  };
 
   request(onSuccess, onError, 'GET');
 };
