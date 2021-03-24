@@ -5,13 +5,7 @@ import { toggleActivateForm, setAdds, resetButton, adForm, changeMinPrice, mapFi
 import { successPopupContent, showError, showAlert, debounce } from './util.js';
 import { filterData, MAX_OFFERS } from './sort.js';
 
-let markers = [];
-
 const RERENDER_DELAY = 500;
-
-const openStrUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-
-const mapAtrr = '&copy; <a href="https://www.openstreet.org/copiryght">OpenStreeetMap</a> contibutors | Icons made by <a href="https://www.freepic.com" title="Freepic">Freepic</a> from <a href="https://www.flaticon.com/" title="Flatcon">www.flatcon.com</a>';
 
 const CENTER_MAP = {
   lat: 35.68950,
@@ -29,6 +23,12 @@ const Icon = {
   WIDTH: 40,
   HEIGHT: 40,
 };
+
+const openStrUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+const mapAtrr = '&copy; <a href="https://www.openstreet.org/copiryght">OpenStreeetMap</a> contibutors | Icons made by <a href="https://www.freepic.com" title="Freepic">Freepic</a> from <a href="https://www.flaticon.com/" title="Flatcon">www.flatcon.com</a>';
+
+let markers = [];
 
 const onError = () => {
   showAlert('Ошибка обработки данных!');

@@ -1,6 +1,7 @@
 import { mapFilters } from './form.js';
 
 const MAX_OFFERS = 10;
+
 const DEFAULT_VALUE = 'any';
 
 const priceMap = {
@@ -19,7 +20,6 @@ const priceMap = {
 };
 
 const filters = Array.from(mapFilters.children);
-// console.log(filters);
 
 const filterRules = {
   'housing-type': (data, filter) => {
