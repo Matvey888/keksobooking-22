@@ -62,64 +62,64 @@ const removeMarkers = () => {
   map.closePopup();
 }
 
-const initMap = () => {
+// const initMap = () => {};
 
-  const createMapIcon = (points) => {
-    points.forEach((point) => {
-      const marker = L.marker(
+const createMapIcon = (points) => {
+  points.forEach((point) => {
+    const marker = L.marker(
+      {
+        lat: point.location.lat,
+        lng: point.location.lng,
+      },
+      {
+        draggable: false,
+        icon: icon,
+      },
+    );
+
+    marker
+      .addTo(layerGroup)
+      .bindPopup(
+        createCard(point),
         {
-          lat: point.location.lat,
-          lng: point.location.lng,
-        },
-        {
-          draggable: false,
-          icon: icon,
+          keepInViev: true,
         },
       );
-
-      marker
-        .addTo(layerGroup)
-        .bindPopup(
-          createCard(point),
-          {
-            keepInViev: true,
-          },
-        );
-    });
-  };
-
-  L.tileLayer(
-    openStrUrl,
-    {
-      attribution: mapAtrr,
-    },
-  ).addTo(map);
-
-  mainMarker.on('moveend', (evt) => {
-    setAdds(evt.target.getLatLng());
   });
-
-  mainMarker.addTo(map);
-
-  const icon = L.icon({
-    iconUrl: './img/pin.svg',
-    iconSize: [Icon.WIDTH, Icon.HEIGHT],
-    iconAnchor: [Icon.WIDTH / 2, Icon.HEIGHT],
-  });
-
-  const onMapFiltersChange = () => {
-    removeMarkers();
-    createMapIcon(filterData(markers.slice()))
-  };
-
-  const onSuccess = (data) => {
-    markers = data.slice();
-    createMapIcon(markers.slice(0, MAX_OFFERS));
-    mapFilters.addEventListener('change', debounce(onMapFiltersChange), RERENDER_DELAY);
-  };
-
-  request(onSuccess, onError, 'GET');
 };
+
+L.tileLayer(
+  openStrUrl,
+  {
+    attribution: mapAtrr,
+  },
+).addTo(map);
+
+mainMarker.on('moveend', (evt) => {
+  setAdds(evt.target.getLatLng());
+});
+
+mainMarker.addTo(map);
+
+const icon = L.icon({
+  iconUrl: './img/pin.svg',
+  iconSize: [Icon.WIDTH, Icon.HEIGHT],
+  iconAnchor: [Icon.WIDTH / 2, Icon.HEIGHT],
+});
+
+const onMapFiltersChange = () => {
+  removeMarkers();
+  createMapIcon(filterData(markers.slice()))
+};
+
+const onSuccess = (data) => {
+  markers = data.slice();
+  createMapIcon(markers.slice(0, MAX_OFFERS));
+  mapFilters.addEventListener('change', debounce(onMapFiltersChange), RERENDER_DELAY);
+};
+
+request(onSuccess, onError, 'GET');
+
 
 const resetMap = () => {
   mainMarker.setLatLng([CENTER_MAP.lat, CENTER_MAP.lng]);
@@ -134,12 +134,15 @@ resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   resetForm();
   resetMap();
+  createMapIcon(markers);
 });
 
 const resetForm = () => {
   adForm.reset();
   changeMinPrice();
+  mapFilters.reset();
   resetMap();
+
   document.body.append(successPopupContent);
 };
 
@@ -148,4 +151,4 @@ adForm.addEventListener('submit', (evt) => {
   request(resetForm, showError, 'POST', new FormData(evt.target))
 });
 
-export { initMap };
+export { };
