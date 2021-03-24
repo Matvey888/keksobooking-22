@@ -142,7 +142,7 @@ const resetForm = () => {
   changeMinPrice();
   mapFilters.reset();
   resetMap();
-
+  createMapIcon(markers);
   document.body.append(successPopupContent);
 };
 
@@ -151,4 +151,4 @@ adForm.addEventListener('submit', (evt) => {
   request(resetForm, showError, 'POST', new FormData(evt.target))
 });
 
-export { };
+export {};
