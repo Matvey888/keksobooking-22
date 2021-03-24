@@ -60,9 +60,7 @@ const layerGroup = L.layerGroup().addTo(map);
 const removeMarkers = () => {
   layerGroup.clearLayers();
   map.closePopup();
-}
-
-// const initMap = () => {};
+};
 
 const createMapIcon = (points) => {
   points.forEach((point) => {
@@ -128,6 +126,7 @@ const resetMap = () => {
     lng: CENTER_MAP.lng,
   }, SCALE);
   setAdds(CENTER_MAP)
+  removeMarkers();
 };
 
 resetButton.addEventListener('click', (evt) => {
