@@ -1,8 +1,13 @@
 /* global L:readonly */
 import { request } from './api.js'
 import { createCard } from './popup.js';
-import { toggleActivateForm, setAdds, resetButton, adForm, changeMinPrice } from './form.js';
-import { successPopupContent, showError, showAlert } from './util.js';
+import { toggleActivateForm, setAdds, resetButton, adForm, changeMinPrice, mapFilters } from './form.js';
+import { successPopupContent, showError, showAlert, debounce } from './util.js';
+import { filterData, MAX_OFFERS } from './sort.js';
+
+let markers = [];
+
+const RERENDER_DELAY = 500;
 
 const openStrUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
@@ -25,6 +30,10 @@ const Icon = {
   HEIGHT: 40,
 };
 
+const onError = () => {
+  showAlert('Ошибка обработки данных!');
+};
+
 const map = L.map('map-canvas')
   .on('load', () => {
     toggleActivateForm();
@@ -33,7 +42,7 @@ const map = L.map('map-canvas')
   .setView(CENTER_MAP, SCALE);
 
 const mainPinIcon = L.icon({
-  iconUrl: '/img/main-pin.svg',
+  iconUrl: './img/main-pin.svg',
   iconSize: [MainIcon.WIDTH, MainIcon.HEIGHT],
   iconAnchor: [MainIcon.WIDTH / 2, MainIcon.HEIGHT],
 });
@@ -46,54 +55,71 @@ const mainMarker = L.marker(
   },
 );
 
-const initMap = () => {
+const layerGroup = L.layerGroup().addTo(map);
 
-  const onSuccess = (points) => {
-    points.forEach((point) => {
-      const marker = L.marker(
+const removeMarkers = () => {
+  layerGroup.clearLayers();
+  map.closePopup();
+}
+
+// const initMap = () => {};
+
+const createMapIcon = (points) => {
+  points.forEach((point) => {
+    const marker = L.marker(
+      {
+        lat: point.location.lat,
+        lng: point.location.lng,
+      },
+      {
+        draggable: false,
+        icon: icon,
+      },
+    );
+
+    marker
+      .addTo(layerGroup)
+      .bindPopup(
+        createCard(point),
         {
-          lat: point.location.lat,
-          lng: point.location.lng,
-        },
-        {
-          draggable: false,
-          icon: icon,
+          keepInViev: true,
         },
       );
-
-      marker
-        .addTo(map)
-        .bindPopup(
-          createCard(point),
-        );
-    });
-  };
-
-  const onError = () => {
-    showAlert('Ошибка обработки данных!');
-  };
-
-  L.tileLayer(
-    openStrUrl,
-    {
-      attribution: mapAtrr,
-    },
-  ).addTo(map);
-
-  mainMarker.on('moveend', (evt) => {
-    setAdds(evt.target.getLatLng());
   });
-
-  mainMarker.addTo(map);
-
-  const icon = L.icon({
-    iconUrl: '/img/pin.svg',
-    iconSize: [Icon.WIDTH, Icon.HEIGHT],
-    iconAnchor: [Icon.WIDTH / 2, Icon.HEIGHT],
-  });
-
-  request(onSuccess, onError, 'GET');
 };
+
+L.tileLayer(
+  openStrUrl,
+  {
+    attribution: mapAtrr,
+  },
+).addTo(map);
+
+mainMarker.on('moveend', (evt) => {
+  setAdds(evt.target.getLatLng());
+});
+
+mainMarker.addTo(map);
+
+const icon = L.icon({
+  iconUrl: './img/pin.svg',
+  iconSize: [Icon.WIDTH, Icon.HEIGHT],
+  iconAnchor: [Icon.WIDTH / 2, Icon.HEIGHT],
+});
+
+const onMapFiltersChange = () => {
+  removeMarkers();
+  createMapIcon(filterData(markers.slice()))
+};
+
+const onSuccess = (data) => {
+  markers = data.slice();
+  createMapIcon(markers.slice(0, MAX_OFFERS));
+  mapFilters.addEventListener('change', debounce(onMapFiltersChange), RERENDER_DELAY);
+};
+
+request(onSuccess, onError, 'GET');
+
 
 const resetMap = () => {
   mainMarker.setLatLng([CENTER_MAP.lat, CENTER_MAP.lng]);
@@ -108,12 +134,15 @@ resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   resetForm();
   resetMap();
+  createMapIcon(markers);
 });
 
 const resetForm = () => {
   adForm.reset();
   changeMinPrice();
+  mapFilters.reset();
   resetMap();
+  createMapIcon(markers);
   document.body.append(successPopupContent);
 };
 
@@ -122,4 +151,4 @@ adForm.addEventListener('submit', (evt) => {
   request(resetForm, showError, 'POST', new FormData(evt.target))
 });
 
-export { initMap };
+export {};

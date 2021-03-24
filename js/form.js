@@ -119,4 +119,4 @@ const setData = (onSuccess) => {
   });
 };
 
-export { toggleActivateForm, setAdds, setData, resetButton, addressElement, adForm, changeMinPrice };
+export { toggleActivateForm, setAdds, setData, resetButton, addressElement, adForm, changeMinPrice, mapFilters };
