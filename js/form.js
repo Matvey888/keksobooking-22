@@ -120,4 +120,4 @@ const setData = (onSuccess) => {
   });
 };
 
-export { toggleActivateForm, setAdds, setData, resetButton, addressElement, adForm, changeMinPrice, mapFilters };
+export { toggleActivateForm, setAdds, setData, resetButton, addressElement, adForm, changeMinPrice, onChangeRoomNumber, mapFilters };

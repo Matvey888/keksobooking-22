@@ -1,7 +1,7 @@
 /* global L:readonly */
 import { request } from './api.js'
 import { createCard } from './popup.js';
-import { toggleActivateForm, setAdds, resetButton, adForm, changeMinPrice, mapFilters } from './form.js';
+import { toggleActivateForm, setAdds, resetButton, adForm, changeMinPrice, onChangeRoomNumber, mapFilters } from './form.js';
 import { successPopupContent, showError, showAlert, debounce } from './util.js';
 import { filterData, MAX_OFFERS } from './sort.js';
 
@@ -139,6 +139,7 @@ resetButton.addEventListener('click', (evt) => {
 const resetForm = () => {
   adForm.reset();
   changeMinPrice();
+  onChangeRoomNumber();
   mapFilters.reset();
   resetMap();
   createMapIcon(markers);
