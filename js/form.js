@@ -3,6 +3,7 @@ import { APARTAMENT_PRICE } from './data.js';
 import { showError } from './util.js';
 
 const DECIMAL_PLACES = 5;
+
 const MAX_PRICE = 1000000;
 
 const RoomsCapacity = {

@@ -150,4 +150,4 @@ adForm.addEventListener('submit', (evt) => {
   request(resetForm, showError, 'POST', new FormData(evt.target))
 });
 
-export {};
+export { };
