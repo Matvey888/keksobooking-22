@@ -1,8 +1,9 @@
 const ALERT_SHOW_TIME = 5000;
 
-const escButton = 'Escape';
-
-const btnEsc = 'Esc';
+const Keys = {
+  ESCAPE: 'Escape',
+  ESC: 'Esc',
+};
 
 const numDecline = (num, words) => {
   num = Math.abs(num) % 100;
@@ -36,10 +37,7 @@ const closePopup = (popup, button) => {
   });
 
   document.addEventListener('keydown', (evt) => {
-    if (evt.key === escButton) {
-      popup.remove();
-    }
-    if (evt.key === btnEsc) {
+    if (evt.key === Keys.ESCAPE || evt.key === Keys.ESC) {
       popup.remove();
     }
   });
