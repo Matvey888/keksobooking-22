@@ -78,8 +78,8 @@ const debounce = (cb, delay) => {
   return () => {
     if (timeout) {
       clearTimeout(timeout);
-      timeout = setTimeout(cb, delay);
     }
+    timeout = setTimeout(cb, delay);
   };
 };
 
