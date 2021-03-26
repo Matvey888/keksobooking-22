@@ -5,7 +5,7 @@ const Keys = {
   ESC: 'Esc',
 };
 
-const numDecline = (num, words) => {
+const numToDecline = (num, words) => {
   num = Math.abs(num) % 100;
   let num1 = num % 10;
   if (num > 10 && num < 20) {
