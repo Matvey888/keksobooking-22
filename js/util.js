@@ -5,7 +5,7 @@ const Keys = {
   ESC: 'Esc',
 };
 
-const numToDecline = (num, words) => {
+const getNumDecline = (num, words) => {
   num = Math.abs(num) % 100;
   let num1 = num % 10;
   if (num > 10 && num < 20) {
@@ -83,4 +83,4 @@ const debounce = (cb, delay) => {
   };
 };
 
-export { numDecline, showError, successPopupContent, showAlert, debounce };
+export { getNumDecline, showError, successPopupContent, showAlert, debounce };

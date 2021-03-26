@@ -1,5 +1,5 @@
 import { TYPES } from './data.js';
-import { numDecline } from './util.js';
+import { getNumDecline } from './util.js';
 
 const ROOMS = ['комната', 'комнаты', 'комнат'];
 const GUESTS = ['гость', 'гостя', 'гостей'];
@@ -65,7 +65,7 @@ const createCard = ({ author, offer }) => {
   }
 
   if (offer.rooms && offer.guests) {
-    capacity.textContent = `${offer.rooms} ${numDecline((offer.rooms), ROOMS)} ${offer.guests} ${numDecline((offer.guests), GUESTS)}`;
+    capacity.textContent = `${offer.rooms} ${getNumDecline((offer.rooms), ROOMS)} ${offer.guests} ${getNumDecline((offer.guests), GUESTS)}`;
   } else {
     capacity.remove();
   }
