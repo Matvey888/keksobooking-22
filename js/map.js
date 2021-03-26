@@ -93,7 +93,7 @@ L.tileLayer(
   },
 ).addTo(map);
 
-mainMarker.on('moveend', (evt) => {
+mainMarker.on('move', (evt) => {
   setAdds(evt.target.getLatLng());
 });
 
