@@ -2,10 +2,10 @@
 import { request } from './api.js'
 import { createCard } from './popup.js';
 import { toggleActivateForm, setAdds, resetButton, adForm, onChangeMinPrice, onChangeRoomNumber, mapFilters } from './form.js';
-import { successPopupContent, showError, showAlert, debounce } from './util.js';
+import { successPopupContent, popupError, errorButton, showError, showAlert, closePopup, debounce } from './util.js';
 import { filterData, MAX_OFFERS } from './sort.js';
 
-const RERENDER_DELAY = 5000;
+const RERENDER_DELAY = 500;
 
 const CENTER_MAP = {
   lat: 35.68950,
@@ -107,7 +107,7 @@ const icon = L.icon({
 
 const onMapFiltersChange = () => {
   removeMarkers();
-  createMapIcon(filterData(markers.slice()))
+  createMapIcon(filterData(markers.slice()));
 };
 
 const onSuccess = (data) => {
@@ -144,11 +144,14 @@ const resetForm = () => {
   resetMap();
   createMapIcon(markers);
   document.body.append(successPopupContent);
+  closePopup(successPopupContent);
+  closePopup(popupError, errorButton);
 };
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  request(resetForm, showError, 'POST', new FormData(evt.target))
+  request(resetForm, showError, 'POST', new FormData(evt.target));
+  closePopup(popupError, errorButton);
 });
 
 export { };

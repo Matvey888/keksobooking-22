@@ -34,18 +34,21 @@ const showError = () => {
 const closePopup = (popup, button) => {
   document.addEventListener('click', () => {
     popup.remove();
+
   });
 
   document.addEventListener('keydown', (evt) => {
     if (evt.key === Keys.ESCAPE || evt.key === Keys.ESC) {
       popup.remove();
     }
+    document.removeEventListener('keydown', closePopup);
   });
 
   if (button) {
     button.addEventListener('click', () => {
       popup.remove();
     });
+    document.removeEventListener('click', closePopup);
   }
 };
 
@@ -68,10 +71,7 @@ const showAlert = (message) => {
   setTimeout(() => {
     alertContainer.remove();
   }, ALERT_SHOW_TIME);
-}
-
-closePopup(popupError, errorButton);
-closePopup(successPopupContent);
+};
 
 const debounce = (cb, delay) => {
   let timeout;
@@ -83,4 +83,4 @@ const debounce = (cb, delay) => {
   };
 };
 
-export { getNumDecline, showError, successPopupContent, showAlert, debounce };
+export { getNumDecline, showError, successPopupContent, popupError, errorButton, showAlert, debounce, closePopup };
