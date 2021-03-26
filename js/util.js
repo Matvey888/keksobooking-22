@@ -34,21 +34,18 @@ const showError = () => {
 const closePopup = (popup, button) => {
   document.addEventListener('click', () => {
     popup.remove();
-
-  });
+  }, {once: true});
 
   document.addEventListener('keydown', (evt) => {
     if (evt.key === Keys.ESCAPE || evt.key === Keys.ESC) {
       popup.remove();
     }
-    document.removeEventListener('keydown', closePopup);
-  });
+  }, {once: true});
 
   if (button) {
     button.addEventListener('click', () => {
       popup.remove();
-    });
-    document.removeEventListener('click', closePopup);
+    }, {once: true});
   }
 };
 
@@ -73,13 +70,16 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-const debounce = (cb, delay) => {
-  let timeout;
-  return () => {
-    if (timeout) {
-      clearTimeout(timeout);
+const debounce = (cb, interval) => {
+  let lastTimeout = null;
+
+  return (...args) => {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
     }
-    timeout = setTimeout(cb, delay);
+    lastTimeout = window.setTimeout(() => {
+      cb(...args);
+    }, interval);
   };
 };
 
