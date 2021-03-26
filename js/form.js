@@ -77,15 +77,15 @@ const toggleActivateForm = () => {
 
 toggleActivateForm();
 
-const changeMinPrice = () => {
+const onChangeMinPrice = () => {
   const type = apartamentTypeElement.value;
   apartamentPriceElement.placeholder = APARTAMENT_PRICE[type];
   apartamentPriceElement.min = APARTAMENT_PRICE[type];
 };
 
-changeMinPrice();
+onChangeMinPrice();
 
-apartamentTypeElement.addEventListener('change', changeMinPrice);
+apartamentTypeElement.addEventListener('change', onChangeMinPrice);
 
 timeInElement.addEventListener('change', (evt) => {
   timeOutElement.value = evt.target.value;
@@ -120,4 +120,4 @@ const setData = (onSuccess) => {
   });
 };
 
-export { toggleActivateForm, setAdds, setData, resetButton, addressElement, adForm, changeMinPrice, onChangeRoomNumber, mapFilters };
+export { toggleActivateForm, setAdds, setData, resetButton, addressElement, adForm, onChangeMinPrice, onChangeRoomNumber, mapFilters };

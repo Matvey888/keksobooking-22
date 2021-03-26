@@ -1,11 +1,11 @@
 /* global L:readonly */
 import { request } from './api.js'
 import { createCard } from './popup.js';
-import { toggleActivateForm, setAdds, resetButton, adForm, changeMinPrice, onChangeRoomNumber, mapFilters } from './form.js';
+import { toggleActivateForm, setAdds, resetButton, adForm, onChangeMinPrice, onChangeRoomNumber, mapFilters } from './form.js';
 import { successPopupContent, showError, showAlert, debounce } from './util.js';
 import { filterData, MAX_OFFERS } from './sort.js';
 
-const RERENDER_DELAY = 500;
+const RERENDER_DELAY = 5000;
 
 const CENTER_MAP = {
   lat: 35.68950,
@@ -138,7 +138,7 @@ resetButton.addEventListener('click', (evt) => {
 
 const resetForm = () => {
   adForm.reset();
-  changeMinPrice();
+  onChangeMinPrice();
   onChangeRoomNumber();
   mapFilters.reset();
   resetMap();
