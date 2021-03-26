@@ -105,15 +105,15 @@ const icon = L.icon({
   iconAnchor: [Icon.WIDTH / 2, Icon.HEIGHT],
 });
 
-const onMapFiltersChange = () => {
+const onMapFiltersChange = debounce(() => {
   removeMarkers();
   createMapIcon(filterData(markers.slice()));
-};
+}, RERENDER_DELAY);
 
 const onSuccess = (data) => {
   markers = data.slice();
   createMapIcon(markers.slice(0, MAX_OFFERS));
-  mapFilters.addEventListener('change', debounce(onMapFiltersChange), RERENDER_DELAY);
+  mapFilters.addEventListener('change', onMapFiltersChange);
 };
 
 request(onSuccess, onError, 'GET');
